@@ -4,14 +4,14 @@ using DIKUArcade.Graphics;
 using System.Collections.Generic;
 using DIKUArcade.Math;
 namespace Galaga {
-    public class Squadron2 : ISquadron {
+    public class SquadronZigZag : ISquadron {
         public EntityContainer<Enemy> Enemies {get; set;}
         public int MaxEnemies {get; set;}
 
         /// <summary> Updates int Maxenemies </summary>
         /// <param> Takes an int </param>
         /// <output> Updated state of MaxEnemies </output> 
-        public Squadron2(int MaxEnemies) {
+        public SquadronZigZag(int MaxEnemies) {
             this.MaxEnemies = MaxEnemies;
             Enemies = new EntityContainer<Enemy>(MaxEnemies);
         }

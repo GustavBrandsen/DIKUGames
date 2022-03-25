@@ -16,5 +16,8 @@ namespace Galaga {
             display.SetText(score.ToString());
             display.RenderText();
         }
+        public int GetScore() {
+            return score;
+        }
     }
 }

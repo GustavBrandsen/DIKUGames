@@ -4,15 +4,15 @@ using DIKUArcade.Graphics;
 using System.Collections.Generic;
 using DIKUArcade.Math;
 namespace Galaga {
-    public class Squadron1 : ISquadron {
+    public class SquadronThreeRows : ISquadron {
         public EntityContainer<Enemy> Enemies {get; set;}
         public int MaxEnemies {get; set;}
 
         /// <summary> Updates int Maxenemies </summary>
         /// <param> Takes an int </param>
         /// <output> Updated state of MaxEnemies </output> 
-        public Squadron1(int MaxEnemies) {
-            this.MaxEnemies = MaxEnemies;
+        public SquadronThreeRows(int MaxEnemies) {
+            this.MaxEnemies = MaxEnemies*3;
             Enemies = new EntityContainer<Enemy>(MaxEnemies);
         }
         /// <summary> Method to create new enemies.</summary>
@@ -20,8 +20,20 @@ namespace Galaga {
         /// <output> Returns nothing </output> 
         public void CreateEnemies (List<Image> enemyStride, List<Image> alternativeEnemyStride){
             for (int i = 0; i < MaxEnemies; i++) {
+                float x = (float) i;
+                float y;
+                if (i < MaxEnemies / 3) {
+                    y = 0.0f;
+                }
+                else if (i >= MaxEnemies / 3 && i < (MaxEnemies / 3) * 2) {
+                    y = 0.1f;
+                    x = i - MaxEnemies / 3;
+                } else {
+                    y = 0.2f;
+                    x = i - (MaxEnemies / 3)*2;
+                }
                 Enemies.AddEntity(new Enemy(
-                    new DynamicShape(new Vec2F(0.1f + (float)i * 0.1f, 0.9f), new Vec2F(0.1f, 0.1f)),
+                    new DynamicShape(new Vec2F(0.1f + x * 0.1f, 0.9f - y), new Vec2F(0.1f, 0.1f)),
                     new ImageStride(80, enemyStride)));
             }
         }

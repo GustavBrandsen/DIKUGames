@@ -22,6 +22,7 @@ namespace Galaga {
         public Player(DynamicShape shape, IBaseImage image) {
             entity = new Entity(shape, image);
             this.shape = shape;
+			GalagaBus.GetBus().Subscribe(GameEventType.InputEvent, this);
         }
         /// <summary> Method to render a player </summary>
         /// <param> Takes no parameters </param>
@@ -103,7 +104,7 @@ namespace Galaga {
                         SetMoveRight(false);
                         break;
                     default:
-                    break;
+                        break;
                 } 
             }
         }

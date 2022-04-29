@@ -19,12 +19,9 @@ namespace Breakout {
             sortData();
             createMap();
         }
-
         public void Render() {
             Blocks.RenderEntities();
         }
-
-
         // Read the strings from the txt file in "lines" and sort them into the lists/dictionaries
         private void sortData() {
 			for (int i = 0; i < lines.Length - 1; i++) {

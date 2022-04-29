@@ -30,7 +30,7 @@ namespace galagaTests {
             GalagaBus.GetBus().RegisterEvent (new GameEvent {EventType = GameEventType.InputEvent, From = this, Message = "SetMoveLeftTrue"});
             GalagaBus.GetBus().ProcessEventsSequentially();
             player.move();
-            Assert.AreNotEqual(playerShape.Position, player.GetPosition());
+            Assert.Less(playerShape.Position, player.GetPosition());
         }
 
     

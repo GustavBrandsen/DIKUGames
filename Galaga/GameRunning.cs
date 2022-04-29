@@ -111,7 +111,6 @@ namespace Galaga.GalagaStates {
 			} else if (action == KeyboardAction.KeyRelease) {
 				KeyRelease(key);
 			}
-
         }
         ///<summary> Sends a message to RegisterPlayerEvent to move player </summary>
 		/// <param> Takes a key as a parameter</param>

@@ -38,6 +38,9 @@ namespace Galaga {
 			stateMachine.ActiveState.HandleKeyEvent(action, key);
         }
 		public void ProcessEvent(GameEvent gameEvent) {
+			if (gameEvent.EventType == GameEventType.GameStateEvent) {
+				stateMachine.ProcessEvent(gameEvent);
+			}
 			if (gameEvent.EventType == GameEventType.WindowEvent) {
 				switch (gameEvent.Message) { 
 					case "CLOSE":
@@ -46,15 +49,6 @@ namespace Galaga {
 					default:
 						break;
 				} 
-			}
-			if (gameEvent.EventType == GameEventType.GameStateEvent) {
-				stateMachine.ProcessEvent(gameEvent);
-				if (gameEvent.Message == "CHANGE_STATE") {
-					switch(gameEvent.StringArg1) {
-						case "GAME_RUNNING":
-							break;
-					}
-				}
 			}
 		}
 		public override void Render() {

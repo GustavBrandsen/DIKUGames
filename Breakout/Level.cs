@@ -9,13 +9,13 @@ using DIKUArcade.Input;
 
 namespace Breakout {
     public class Level {
-        private EntityContainer<Block> Blocks = new EntityContainer<Block>();
-        public List<string> map {private set; get;} = new List<string>{};
-        public Dictionary<string, string> meta {private set; get;} = new Dictionary<string, string>();
-        public Dictionary<char, string> legend {private set; get;} = new Dictionary<char, string>();
+        public EntityContainer<Block> Blocks {private set; get;} = new EntityContainer<Block>();
+        private List<string> map { set; get;} = new List<string>{};
+        private Dictionary<string, string> meta { set; get;} = new Dictionary<string, string>();
+        private Dictionary<char, string> legend { set; get;} = new Dictionary<char, string>();
         private string[] lines;
         public Level(string filename) {
-            lines = System.IO.File.ReadAllLines("Assets/Levels/" + filename);
+            lines = System.IO.File.ReadAllLines(filename);
             sortData();
             createMap();
         }

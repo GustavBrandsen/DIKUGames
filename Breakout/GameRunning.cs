@@ -43,7 +43,6 @@ namespace Breakout.BreakoutStates {
             RenderState();
 			UpdateState();
             for (int i = 0; i < fileEntries.Length - 1; i++) {
-                System.Console.WriteLine(fileEntries[i]);
             }
         }
         public void ResetState() {

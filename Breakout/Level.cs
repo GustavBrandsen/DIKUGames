@@ -10,9 +10,9 @@ using DIKUArcade.Input;
 namespace Breakout {
     public class Level {
         public EntityContainer<Block> Blocks {private set; get;} = new EntityContainer<Block>();
-        private List<string> map { set; get;} = new List<string>{};
-        private Dictionary<string, string> meta { set; get;} = new Dictionary<string, string>();
-        private Dictionary<char, string> legend { set; get;} = new Dictionary<char, string>();
+        public List<string> map { private set; get;} = new List<string>{};
+        public Dictionary<string, string> meta { private set; get;} = new Dictionary<string, string>();
+        public Dictionary<char, string> legend { private set; get;} = new Dictionary<char, string>();
         private string[] lines;
         public Level(string filename) {
             lines = System.IO.File.ReadAllLines(filename);
@@ -58,12 +58,26 @@ namespace Breakout {
         private void createMap() {
 			for (int y = 0; y < map.Count - 1; y++) {
 				for (int x = 0; x < map[y].Length; x++) {
-					if (!(map[y][x] == '-')) {
-						Blocks.AddEntity(new Block(
-												new DynamicShape(new Vec2F(x/12f, 1f-(y/25f)), new Vec2F(1/12f, 0.04f)),
-												new ImageStride(80, ImageStride.CreateStrides(1, Path.Combine("Assets", "Images", legend[map[y][x]])))
-						));
-					}
+
+						if (meta.ContainsKey("Unbreakable") && map[y][x] == char.Parse(meta["Unbreakable"])) {
+							Blocks.AddEntity(new UnbreakableBlock(
+													new DynamicShape(new Vec2F(x/12f, 1f-(y/25f)), new Vec2F(1/12f, 0.04f)),
+													new ImageStride(80, ImageStride.CreateStrides(1, Path.Combine("Assets", "Images", legend[map[y][x]])))
+							));
+						}
+						if (meta.ContainsKey("Hardened") && map[y][x] == char.Parse(meta["Hardened"])) {
+							Blocks.AddEntity(new HardenedBlock(
+													new DynamicShape(new Vec2F(x/12f, 1f-(y/25f)), new Vec2F(1/12f, 0.04f)),
+													new ImageStride(80, ImageStride.CreateStrides(1, Path.Combine("Assets", "Images", legend[map[y][x]])))
+							));
+						}
+						else if (!(map[y][x] == '-')) {
+							Blocks.AddEntity(new DefaultBlock(
+													new DynamicShape(new Vec2F(x/12f, 1f-(y/25f)), new Vec2F(1/12f, 0.04f)),
+													new ImageStride(80, ImageStride.CreateStrides(1, Path.Combine("Assets", "Images", legend[map[y][x]])))
+							));
+						}
+
 				}
 			}
         }
@@ -71,3 +85,7 @@ namespace Breakout {
 
     }
 }
+
+
+
+

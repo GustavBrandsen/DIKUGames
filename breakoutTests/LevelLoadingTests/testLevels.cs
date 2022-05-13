@@ -22,9 +22,9 @@ namespace breakoutTests {
         public void Setup()
         {
             Window.CreateOpenGLContext();
-            level0 = new Level("../../../../../Assets/Levels/empty-level.txt");
-            level1 = new Level("../../../../../Assets/Levels/level1.txt");
-            level2 = new Level("../../../../../Assets/Levels/level2.txt");
+            level0 = new Level("../../../Assets/Levels/empty-level.txt");
+            level1 = new Level("../../../Assets/Levels/level1.txt");
+            level2 = new Level("../../../Assets/Levels/level2.txt");
         }
         [Test]
         public void TestDifferencesInLevels()

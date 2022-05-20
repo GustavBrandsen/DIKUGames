@@ -15,7 +15,7 @@ namespace breakoutTests {
 
     public class PlayerTests
     {
-        private Player player;
+        private Player player = default!;
         
         [SetUp]
         public void Setup()
@@ -24,13 +24,8 @@ namespace breakoutTests {
             player = new Player(
                 new DynamicShape(new Vec2F(0.4f, 0.05f), new Vec2F(0.2f, 0.03f)),
                 new Image(Path.GetFullPath(Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..","..","..","Assets", "Images", "player.png"))));
-                
-            //BreakoutBus.GetBus().InitializeEventBus(new List<GameEventType> { GameEventType.InputEvent });    
-            BreakoutBus.GetBus().Subscribe(GameEventType.InputEvent, player);
-			
-            
-            
         }
+        
         [Test]
         public void TestInitialPosition()
         {
@@ -39,24 +34,28 @@ namespace breakoutTests {
         [Test]
         public void TestMoveRight()
         {
-            System.Console.WriteLine(player.GetPosition().X);
-            //BreakoutBus.GetBus().RegisterEvent (new GameEvent {EventType = GameEventType.InputEvent, From = this, To = player, Message = "SetMoveRightTrue"});
-            //SendPlayerInput("SetMoveRightTrue");
-            BreakoutBus.GetBus().ProcessEventsSequentially();
-            System.Console.WriteLine(player.GetPosition().X);
-            //Assert.Less((0.5f - 0.5*player.GetExtent().X), (player.GetPosition().X));
-            player.movePlayer();
-            Assert.AreEqual((player.GetPosition().X), (0.5f - 0.5*player.GetExtent().X));
+            player.ProcessEvent(
+                new GameEvent {
+                    EventType = GameEventType.InputEvent,
+                    To = player,
+                    Message = "MoveRightTrue"
+                }
+            );
+            player.MovePlayer();
+            Assert.AreNotEqual(0.5f - 0.5*player.GetExtent().X, player.GetPosition().X);
         }
 
         [Test]
         public void TestMoveLeft(){
-
-            System.Console.WriteLine(player.GetPosition().X);
-            BreakoutBus.GetBus().RegisterEvent (new GameEvent {EventType = GameEventType.InputEvent, From = this, Message = "SetMoveLeftTrue"});
-            System.Console.WriteLine(player.GetPosition().X);
-            Assert.Less(0.0f, player.moveLeft);
-
+            player.ProcessEvent(
+                new GameEvent {
+                    EventType = GameEventType.InputEvent,
+                    To = player,
+                    Message = "MoveLeftTrue"
+                }
+            );
+            player.MovePlayer();
+            Assert.AreNotEqual(player.GetPosition().X, 0.5f - 0.5*player.GetExtent().X);
         }
     }
 }

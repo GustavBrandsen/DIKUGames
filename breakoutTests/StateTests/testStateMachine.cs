@@ -9,7 +9,7 @@ namespace BreakoutTests {
     [TestFixture]
     public class StateMachineTesting {
         private StateMachine stateMachine = new StateMachine();
-        private GameEventBus gamebus;
+        private GameEventBus gamebus = default!;
         [SetUp]
         public void InitiateStateMachine() {
             Window.CreateOpenGLContext();

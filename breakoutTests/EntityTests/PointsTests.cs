@@ -13,7 +13,7 @@ namespace BreakoutTests;
 
 public class TestScore
 {
-    private Score score;
+    private Score score = default!;
     [SetUp]
     public void Setup()
     {

@@ -45,7 +45,7 @@ namespace Breakout {
                 } 
             }
         }
-        public void movePlayer() {
+        public void MovePlayer() {
             if (!(moveLeft == 0.0f)) {
                 if (shape.Position.X > 0 && shape.Position.X <= 0.78f + MOVEMENT_SPEED) {
                     shape.Move();

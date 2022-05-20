@@ -14,7 +14,7 @@ namespace breakoutTests {
 
     public class BallTests
     {
-        private Ball ball;
+        private Ball ball = default!;
         
         [SetUp]
         public void Setup()
@@ -29,28 +29,28 @@ namespace breakoutTests {
         public void TestUpCollision()
         {
             var initialY = ball.Shape.AsDynamicShape().Direction.Y;
-            ball.updateDirection(CollisionDirection.CollisionDirUp);
+            ball.UpdateDirection(CollisionDirection.CollisionDirUp);
             Assert.AreEqual(initialY*-1f, ball.Shape.AsDynamicShape().Direction.Y);
         }
         [Test]
         public void TestDownCollision()
         {
             var initialY = ball.Shape.AsDynamicShape().Direction.Y;
-            ball.updateDirection(CollisionDirection.CollisionDirDown);
+            ball.UpdateDirection(CollisionDirection.CollisionDirDown);
             Assert.AreEqual(initialY*-1f, ball.Shape.AsDynamicShape().Direction.Y);
         }
         [Test]
         public void TestRightCollision()
         {
             var initialX = ball.Shape.AsDynamicShape().Direction.X;
-            ball.updateDirection(CollisionDirection.CollisionDirRight);
+            ball.UpdateDirection(CollisionDirection.CollisionDirRight);
             Assert.AreEqual(initialX*-1f, ball.Shape.AsDynamicShape().Direction.X);
         }
         [Test]
         public void TestLeftCollision()
         {
             var initialX = ball.Shape.AsDynamicShape().Direction.X;
-            ball.updateDirection(CollisionDirection.CollisionDirLeft);
+            ball.UpdateDirection(CollisionDirection.CollisionDirLeft);
             Assert.AreEqual(initialX*-1f, ball.Shape.AsDynamicShape().Direction.X);
         }
     }

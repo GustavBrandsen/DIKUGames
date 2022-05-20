@@ -13,8 +13,8 @@ namespace breakoutTests {
 
     public class HardenedBlockTests
     {
-        private HardenedBlock Hardenedblock;
-        private DefaultBlock block;
+        private HardenedBlock Hardenedblock = default!;
+        private DefaultBlock block = default!;
         
         [SetUp]
         public void Setup()
@@ -31,28 +31,28 @@ namespace breakoutTests {
         [Test]
         public void TestHealthExists()
         {
-            Assert.IsNotNull(Hardenedblock.getHealth());
+            Assert.IsNotNull(Hardenedblock.GetHealth());
         }
         [Test]
         public void TestValueExists()
         {
-            Assert.IsNotNull(Hardenedblock.getValue());
+            Assert.IsNotNull(Hardenedblock.GetValue());
         }
         [Test]
         public void TestBlockHit()
         {
-            Hardenedblock.decreasehealth();
-            Assert.AreEqual(Hardenedblock.getHealth(), 1);
+            Hardenedblock.Decreasehealth();
+            Assert.AreEqual(Hardenedblock.GetHealth(), 1);
         }
         [Test]
         public void TestBlockDoubleHP()
         {
-            Assert.AreEqual(Hardenedblock.getHealth(), block.getHealth()*2);
+            Assert.AreEqual(Hardenedblock.GetHealth(), block.GetHealth()*2);
         }
         [Test]
         public void TestBlockDoubleValue()
         {
-            Assert.AreEqual(Hardenedblock.getValue(), block.getValue()*2);
+            Assert.AreEqual(Hardenedblock.GetValue(), block.GetValue()*2);
         }
     }
 }

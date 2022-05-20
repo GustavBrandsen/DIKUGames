@@ -15,7 +15,7 @@ namespace Breakout {
         ///<summary> Decrements the health field </summary>
         /// <param> Takes no parameter </param>
         /// <output> Nothing </output> 
-        public override void decreasehealth () {
+        public override void Decreasehealth() {
             health--;
             if (health == 1) {
                 
@@ -24,10 +24,10 @@ namespace Breakout {
                 this.DeleteEntity();
             }
         }
-        public override int getHealth() {
+        public override int GetHealth() {
             return health;
         }
-        public override int getValue() {
+        public override int GetValue() {
             return value;
         }
     }

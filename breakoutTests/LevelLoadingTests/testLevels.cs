@@ -14,9 +14,9 @@ namespace breakoutTests {
 
     public class LevelTests
     {
-        private Level level0;
-        private Level level1;
-        private Level level2;
+        private Level level0 = default!;
+        private Level level1 = default!;
+        private Level level2 = default!;
         
         [SetUp]
         public void Setup()

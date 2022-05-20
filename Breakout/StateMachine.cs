@@ -2,7 +2,7 @@ using DIKUArcade.Events;
 using DIKUArcade.State;
 using System.Collections.Generic;
 namespace Breakout.BreakoutStates {
-    public class StateMachine : IGameEventProcessor {
+    public class StateMachine : IGameEventProcessor, IStateMachine {
         public IGameState ActiveState { get; private set; }
         public StateMachine() {
             BreakoutBus.GetBus().Subscribe(GameEventType.GameStateEvent, this);

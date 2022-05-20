@@ -17,7 +17,7 @@ namespace Breakout.BreakoutStates {
         private static GameRunning instance = default!;
 		private IBaseImage ballImage;
 		private EntityContainer<Ball> balls;
-        private Score score;
+        private Points points;
         private string[] fileEntries;
         public GameRunning() {
 			player = new Player(
@@ -30,7 +30,7 @@ namespace Breakout.BreakoutStates {
 
 			level = new Level(fileEntries[levelNum]);
 
-            score = new Score(new Vec2F(0.05f,-0.2f), new Vec2F(0.3f,0.3f));
+            points = new Points(new Vec2F(0.05f,-0.2f), new Vec2F(0.3f,0.3f));
         }
         public static GameRunning GetInstance() {
             if (GameRunning.instance == default!) {
@@ -73,7 +73,9 @@ namespace Breakout.BreakoutStates {
 						break;
 					case KeyboardKey.Space:
                         if (balls.CountEntities() == 0) {
-						    balls.AddEntity(new Ball(new Vec2F(player.GetPosition().X+0.083f,player.GetPosition().Y+0.03f),ballImage));
+						    balls.AddEntity(new Ball(
+                                new Vec2F(player.GetPosition().X+0.083f,player.GetPosition().Y+0.03f),
+                                ballImage));
                         }
                         break;
 					case KeyboardKey.P:
@@ -98,7 +100,7 @@ namespace Breakout.BreakoutStates {
 				}
 			}
         }
-        private void nextMap() {
+        private void NextMap() {
             if (level.Blocks.CountEntities() == 0) {
                 if (levelNum + 1 < fileEntries.Length) {
                     levelNum++;
@@ -127,27 +129,31 @@ namespace Breakout.BreakoutStates {
 				} else {
 					level.Blocks.Iterate(block => {
                         if (ball.Shape.Position.X <= 0.0f){
-                            ball.updateDirection(CollisionDirection.CollisionDirLeft);
+                            ball.UpdateDirection(CollisionDirection.CollisionDirLeft);
                             ball.Shape.Position.X = 0.001f;
                         }
                         if (ball.Shape.Position.X >= 0.96f){
-                            ball.updateDirection(CollisionDirection.CollisionDirRight);
+                            ball.UpdateDirection(CollisionDirection.CollisionDirRight);
                             ball.Shape.Position.X = 0.959f;
                         }
                         if (ball.Shape.Position.Y >= 0.96f){
-                            ball.updateDirection(CollisionDirection.CollisionDirUp);
+                            ball.UpdateDirection(CollisionDirection.CollisionDirUp);
                             ball.Shape.Position.Y = 0.959f;
                         }
 					    if (CollisionDetection.Aabb(ball.Shape.AsDynamicShape(), block.Shape).Collision) {
-                            ball.updateDirection(CollisionDetection.Aabb(ball.Shape.AsDynamicShape(), block.Shape).CollisionDir);
-						    block.decreasehealth();
-                            if (block.getHealth() <= 0) {
+                            ball.UpdateDirection(
+                                CollisionDetection.Aabb(ball.Shape.AsDynamicShape(), block.Shape).CollisionDir
+                                );
+						    block.Decreasehealth();
+                            if (block.GetHealth() <= 0) {
                                 block.DeleteEntity();
-                                score.AddPoints(block.getValue());
+                                points.AddPoints(block.GetValue());
                             }
                         }
 					    if (CollisionDetection.Aabb(ball.Shape.AsDynamicShape(), player.Shape).Collision) {
-                            ball.updateDirection(CollisionDetection.Aabb(ball.Shape.AsDynamicShape(), player.Shape).CollisionDir);
+                            ball.UpdateDirection(
+                                CollisionDetection.Aabb(ball.Shape.AsDynamicShape(), player.Shape).CollisionDir
+                                );
                             ball.Shape.Position.Y = player.Shape.Position.Y + player.Shape.AsDynamicShape().Extent.Y;
                         }
                     });
@@ -170,12 +176,12 @@ namespace Breakout.BreakoutStates {
             level.Render();
 			player.Render();
 			balls.RenderEntities();
-            score.Render();
+            points.Render();
 		}
 		public void UpdateState() {
-			player.movePlayer();
+			player.MovePlayer();
             IterateBalls();
-            nextMap();
+            NextMap();
 		}
     }
 }

@@ -13,7 +13,7 @@ namespace breakoutTests {
 
     public class DefaultBlockTests
     {
-        private DefaultBlock block;
+        private DefaultBlock block = default!;
         
         [SetUp]
         public void Setup()
@@ -26,18 +26,18 @@ namespace breakoutTests {
         [Test]
         public void TestHealthExists()
         {
-            Assert.IsNotNull(block.getHealth());
+            Assert.IsNotNull(block.GetHealth());
         }
         [Test]
         public void TestValueExists()
         {
-            Assert.IsNotNull(block.getValue());
+            Assert.IsNotNull(block.GetValue());
         }
         [Test]
         public void TestBlockHit()
         {
-            block.decreasehealth();
-            Assert.AreEqual(block.getHealth(), 0);
+            block.Decreasehealth();
+            Assert.AreEqual(block.GetHealth(), 0);
         }
     }
 }

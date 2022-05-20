@@ -5,7 +5,7 @@ using DIKUArcade.Math;
 using DIKUArcade.Events;
 
 namespace Breakout {
-    public class Player : Entity, IGameEventProcessor {
+    public class Player : Entity, IGameEventProcessor, IPlayer {
         private IBaseImage image;
         private DynamicShape shape;
         public float moveLeft {get; private set;} = 0.0f;

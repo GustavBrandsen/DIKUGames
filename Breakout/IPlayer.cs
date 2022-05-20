@@ -1,8 +1,11 @@
 using DIKUArcade.Math;
-using DIKUArcade.Physics;
+using DIKUArcade.Events;
 namespace Breakout {
     public interface IPlayer {
-        void AddPoints (int addPoints);
         void Render();
+        Vec2F GetPosition();
+        Vec2F GetExtent();
+        void ProcessEvent(GameEvent gameEvent);
+        void MovePlayer();
     }
 }

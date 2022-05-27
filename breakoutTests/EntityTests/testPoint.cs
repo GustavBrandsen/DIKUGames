@@ -11,23 +11,23 @@ using DIKUArcade.Physics;
 
 namespace BreakoutTests;
 
-public class TestScore
+public class TestPoint
 {
-    private Score score = default!;
+    private Points point = default!;
     [SetUp]
     public void Setup()
     {
         Window.CreateOpenGLContext();
-        score = new Score(new Vec2F(0.0f,0.5f), new Vec2F(0.5f,0.5f));
+        point = new Points(new Vec2F(0.0f,0.5f), new Vec2F(0.5f,0.5f));
     }
 
     [Test]
-    public void TestScoreAdd ()
+    public void TestpointAdd ()
     {
         for (int i = 0; i < 100; i++) {
-            score.AddPoints(1);
+            point.AddPoints(1);
         }
-        Assert.AreEqual(100, score.GetScore());
+        Assert.AreEqual(100, point.GetPoints());
     }
 
   

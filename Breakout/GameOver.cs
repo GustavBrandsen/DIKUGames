@@ -6,18 +6,18 @@ using DIKUArcade.Input;
 using DIKUArcade.Math;
 using System.IO;
 using DIKUArcade.Events;
-using DIKUArcade.Timers;
 
 namespace Breakout.BreakoutStates{
-	public class GamePaused : IGameState {
-		private static GamePaused instance = default!;
+	public class GameOver : IGameState {
+		private static GameOver instance = default!;
 		private Entity backGroundImage;
 		private Text[] menuButtons;
 		private int activeMenuButton;
-		private Text gamePaused;
-		public GamePaused() {
+		private Text gameOverText;
+		private System.Drawing.Color gameOverTextColor = default!;
+		public GameOver() {
 			menuButtons = new Text[] {
-				new Text("Continue", new Vec2F(0.4f,0.2f), new Vec2F(0.4f,0.4f)),
+				new Text("Main menu", new Vec2F(0.38f,0.2f), new Vec2F(0.4f,0.4f)),
 				new Text("Quit", new Vec2F(0.45f,0.1f), new Vec2F(0.4f,0.4f))
 			};
 			backGroundImage = new Entity(
@@ -25,20 +25,24 @@ namespace Breakout.BreakoutStates{
 			    new Image(Path.Combine("Assets", "Images", "shipit_titlescreen.png"))
 			);
 			activeMenuButton = 0;
-
-			gamePaused = new Text("Game is Paused!", new Vec2F(0.20f,0.13f), new Vec2F(0.6f,0.6f));
-			gamePaused.SetColor(System.Drawing.Color.Turquoise);
+			gameOverText = new Text("You ", new Vec2F(0.40f,0.30f), new Vec2F(0.4f,0.4f));
 		}
-		public static GamePaused GetInstance() {
-			if (GamePaused.instance == default!) {
-				GamePaused.instance = new GamePaused();
-				GamePaused.instance.InitializeGameState();
+		public static GameOver GetInstance(string msg) {
+			if (GameOver.instance == default!) {
+				GameOver.instance = new GameOver();
+				GameOver.instance.InitializeGameState(msg);
 			}
-			return GamePaused.instance;
+			return GameOver.instance;
 		}
-		public void InitializeGameState() {
+		public void InitializeGameState(string msg) {
 			RenderState();
 			UpdateState();
+			gameOverText.SetText("You " + msg);
+			if (msg == "Won") {
+				gameOverTextColor = System.Drawing.Color.Yellow;
+			} else {
+				gameOverTextColor = System.Drawing.Color.Red;
+			}
 		}
 		public void ResetState() {
 			instance = default!;
@@ -53,7 +57,7 @@ namespace Breakout.BreakoutStates{
 		/// Update all variables that are being used by this GameState.
 		/// </summary>
 		public void UpdateState() {
-
+			gameOverText.SetColor(gameOverTextColor);
 		}
 		
 		/// <summary>
@@ -61,7 +65,7 @@ namespace Breakout.BreakoutStates{
 		/// </summary>
 		public void RenderState() {
 			backGroundImage.RenderEntity();
-			gamePaused.RenderText();
+			gameOverText.RenderText();
 
 			for (int i = 0; i < menuButtons.Length; i++) {
 				menuButtons[i].SetColor(System.Drawing.Color.Gray);
@@ -109,10 +113,9 @@ namespace Breakout.BreakoutStates{
 								new GameEvent {
 									EventType = GameEventType.GameStateEvent,
 									Message = "CHANGE_STATE",
-									StringArg1 = "GAME_RUNNING"
+									StringArg1 = "MAIN_MENU"
 								}
 							);
-							StaticTimer.ResumeTimer();
 						} else if (activeMenuButton == 1) {
 							BreakoutBus.GetBus().RegisterEvent(
 								new GameEvent {

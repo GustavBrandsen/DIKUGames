@@ -8,5 +8,6 @@ namespace Breakout {
         public abstract void Decreasehealth ();
         public abstract int GetHealth();
         public abstract int GetValue();
+        public abstract bool CheckPowerUp();
     }
 }

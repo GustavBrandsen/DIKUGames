@@ -8,11 +8,12 @@ using System.Collections.Generic;
 namespace BreakoutTests {
     [TestFixture]
     public class StateMachineTesting {
-        private StateMachine stateMachine = new StateMachine();
+        private StateMachine stateMachine = default!;
         private GameEventBus gamebus = default!;
         [SetUp]
         public void InitiateStateMachine() {
             Window.CreateOpenGLContext();
+            stateMachine = new StateMachine();
             BreakoutBus.GetBus().InitializeEventBus(new List<GameEventType> { GameEventType.GameStateEvent});
             gamebus = BreakoutBus.GetBus();
             
@@ -57,6 +58,18 @@ namespace BreakoutTests {
             );
             gamebus.ProcessEventsSequentially();
             Assert.That(stateMachine.ActiveState, Is.InstanceOf<MainMenu>()); 
+        }
+        [Test]
+        public void TestEventGameOver() {
+            gamebus.RegisterEvent(
+                new GameEvent {
+                    EventType = GameEventType.GameStateEvent,
+                    Message = "CHANGE_STATE",
+                    StringArg1 = "GAME_OVER"
+                }
+            );
+            gamebus.ProcessEventsSequentially();
+            Assert.That(stateMachine.ActiveState, Is.InstanceOf<GameOver>()); 
         }
     }
 }

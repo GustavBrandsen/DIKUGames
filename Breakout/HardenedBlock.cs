@@ -6,9 +6,11 @@ namespace Breakout {
         private int value;
         private IBaseImage image;
         private DynamicShape shape;
-        public HardenedBlock(DynamicShape shape, IBaseImage image) : base(shape, image) {
+        private bool powerUp = false;
+        public HardenedBlock(DynamicShape shape, IBaseImage image, bool PowerUp) : base(shape, image) {
             this.health = 2;
             this.value = 2;
+            this.powerUp = PowerUp;
             this.image = image;
             this.shape = shape;
         }
@@ -30,5 +32,7 @@ namespace Breakout {
         public override int GetValue() {
             return value;
         }
+        public override bool CheckPowerUp() {
+            return powerUp;
+        }
     }
-}

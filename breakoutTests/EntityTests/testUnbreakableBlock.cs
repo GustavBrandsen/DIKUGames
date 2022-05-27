@@ -33,11 +33,5 @@ namespace breakoutTests {
         {
             Assert.IsNotNull(block.GetValue());
         }
-        [Test]
-        public void TestBlockHit()
-        {
-            block.Decreasehealth();
-            Assert.AreEqual(block.GetHealth(), 0);
-        }
     }
 }

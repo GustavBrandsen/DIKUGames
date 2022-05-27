@@ -27,7 +27,7 @@ Map/
 
 Meta:
 Name: Test D
-Time: 300
+Time: 10
 Meta/
 
 Legend:

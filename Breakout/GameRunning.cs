@@ -8,6 +8,7 @@ using DIKUArcade.Events;
 using DIKUArcade.Input;
 using DIKUArcade.State;
 using DIKUArcade.Physics;
+using DIKUArcade.Timers;
 
 namespace Breakout.BreakoutStates {
     public class GameRunning : IGameState {
@@ -18,10 +19,16 @@ namespace Breakout.BreakoutStates {
 		private IBaseImage ballImage;
 		private EntityContainer<Ball> balls;
         private Points points;
+        private int life;
+		private EntityContainer<Life> lives;
+        private GameTime gameTime = default!;
         private string[] fileEntries;
+        private EntityContainer<PowerUp> powerUps;
+        private Dictionary<string, double> timedPowerUps = new Dictionary<string, double>();
+        private int infiniteLife;
         public GameRunning() {
 			player = new Player(
-				new DynamicShape(new Vec2F(0.4f, 0.05f), new Vec2F(0.2f, 0.03f)),
+				new DynamicShape(new Vec2F(0.4f, 0.1f), new Vec2F(0.2f, 0.03f)),
 				new Image(Path.Combine("Assets", "Images", "player.png")));
 
 			balls = new EntityContainer<Ball>();
@@ -31,6 +38,11 @@ namespace Breakout.BreakoutStates {
 			level = new Level(fileEntries[levelNum]);
 
             points = new Points(new Vec2F(0.05f,-0.2f), new Vec2F(0.3f,0.3f));
+
+            life = 3;
+			lives = new EntityContainer<Life>();
+            
+			powerUps = new EntityContainer<PowerUp>();
         }
         public static GameRunning GetInstance() {
             if (GameRunning.instance == default!) {
@@ -72,13 +84,16 @@ namespace Breakout.BreakoutStates {
 						level.Blocks.ClearContainer();
 						break;
 					case KeyboardKey.Space:
-                        if (balls.CountEntities() == 0) {
+                        if (balls.CountEntities() == 0 || timedPowerUps.ContainsKey("infiniteBalls")) {
 						    balls.AddEntity(new Ball(
-                                new Vec2F(player.GetPosition().X+0.083f,player.GetPosition().Y+0.03f),
+                                new Vec2F(player.GetPosition().X+(player.GetExtent().X/2)-0.02f,player.GetPosition().Y+0.03f),
                                 ballImage));
                         }
                         break;
 					case KeyboardKey.P:
+                        if (gameTime != default!) {
+                            gameTime.PauseTimer();
+                        }
                         BreakoutBus.GetBus().RegisterEvent(
 							new GameEvent {
 								EventType = GameEventType.GameStateEvent,
@@ -105,8 +120,9 @@ namespace Breakout.BreakoutStates {
                 if (levelNum + 1 < fileEntries.Length) {
                     levelNum++;
                     balls.ClearContainer();
-                    player.Shape.Position = new Vec2F(0.4f, 0.05f);
+                    player.Shape.Position = new Vec2F(0.4f, 0.1f);
                     level = new Level(fileEntries[levelNum]);
+                    CreateGameTimer();
                     RenderState();
                 } else {
                     ResetState();
@@ -126,6 +142,23 @@ namespace Breakout.BreakoutStates {
 			    ball.Shape.Move();
 				if (ball.Shape.Position.Y <= 0.0f) {
 					ball.DeleteEntity();
+                    if (balls.CountEntities() == 1) {
+                        life--;
+                        lives.ClearContainer();
+                        CreateLives();
+
+                        if(life == 0){
+                            ResetState();
+                            BreakoutBus.GetBus().RegisterEvent(
+                                new GameEvent {
+                                    EventType = GameEventType.GameStateEvent,
+                                    Message = "CHANGE_STATE",
+                                    StringArg1 = "GAME_OVER",
+                                    StringArg2 = "Lost"
+                                }
+                            );
+                        }
+                    }
 				} else {
 					level.Blocks.Iterate(block => {
                         if (ball.Shape.Position.X <= 0.0f){
@@ -148,6 +181,9 @@ namespace Breakout.BreakoutStates {
                             if (block.GetHealth() <= 0) {
                                 block.DeleteEntity();
                                 points.AddPoints(block.GetValue());
+                                if (block.CheckPowerUp()) {
+                                    ActivatePowerUp(block.Shape.Position);
+                                }
                             }
                         }
 					    if (CollisionDetection.Aabb(ball.Shape.AsDynamicShape(), player.Shape).Collision) {
@@ -161,6 +197,140 @@ namespace Breakout.BreakoutStates {
 			});
 		}
 
+        private void IteratePowerUps() {
+            powerUps.Iterate(powerUp => {
+			    powerUp.Shape.Move();
+                if (CollisionDetection.Aabb(powerUp.Shape.AsDynamicShape(), player.Shape).Collision) {
+                    powerUp.DeleteEntity();
+                    if (powerUp.GetType() == typeof(Breakout.ExtraBall)) {
+                        if (timedPowerUps.ContainsKey("infiniteBalls")) {
+                            timedPowerUps.Remove("infiniteBalls");
+                        }
+                        timedPowerUps.Add("infiniteBalls", StaticTimer.GetElapsedSeconds()+(double) 3);
+                    }
+                    if (powerUp.GetType() == typeof(Breakout.ExtraLife) && life < 4) {
+                        life++;
+                    }
+                    if (powerUp.GetType() == typeof(Breakout.ExtraWide) && life < 4) {
+                        if (timedPowerUps.ContainsKey("doublePlayerSize")) {
+                            timedPowerUps.Remove("doublePlayerSize");
+                            player.NormalSize();
+                        }
+                        timedPowerUps.Add("doublePlayerSize", StaticTimer.GetElapsedSeconds()+(double) 3);
+                        player.DoubleSize();
+                    }
+                    if (powerUp.GetType() == typeof(Breakout.ExtraInvincible)) {
+                        if (timedPowerUps.ContainsKey("invincible")) {
+                            timedPowerUps.Remove("invincible");
+                        }
+                        timedPowerUps.Add("invincible", StaticTimer.GetElapsedSeconds()+(double) 3);
+                        infiniteLife = life;
+                    }
+                    if (powerUp.GetType() == typeof(Breakout.ExtraPlayerSpeed)) {
+                        if (timedPowerUps.ContainsKey("extraPlayerSpeed")) {
+                            timedPowerUps.Remove("extraPlayerSpeed");
+                        }
+                        timedPowerUps.Add("extraPlayerSpeed", StaticTimer.GetElapsedSeconds()+(double) 3);
+                        player.DoubleSpeed();
+                    }
+                    
+                }
+                if (powerUp.Shape.Position.Y <= 0.1f) {
+                    powerUp.DeleteEntity();
+                }
+            });
+        }
+
+        private void TimedPowerUps() {
+            if (timedPowerUps.ContainsKey("infiniteBalls") && timedPowerUps["infiniteBalls"] <= StaticTimer.GetElapsedSeconds()) {
+                timedPowerUps.Remove("infiniteBalls");
+            }
+            if (timedPowerUps.ContainsKey("doublePlayerSize") && timedPowerUps["doublePlayerSize"] <= StaticTimer.GetElapsedSeconds()) {
+                timedPowerUps.Remove("doublePlayerSize");
+                player.NormalSize();
+            }
+            if (timedPowerUps.ContainsKey("invincible")) {
+                life = infiniteLife;
+                    if (balls.CountEntities() == 0) {
+                        balls.AddEntity(new Ball(
+                            new Vec2F(player.GetPosition().X+0.083f,player.GetPosition().Y+0.03f),
+                            ballImage));
+                    }
+            }
+            if (timedPowerUps.ContainsKey("invincible") && timedPowerUps["invincible"] <= StaticTimer.GetElapsedSeconds()) {
+                timedPowerUps.Remove("invincible");
+            }
+            if (timedPowerUps.ContainsKey("extraPlayerSpeed") && timedPowerUps["extraPlayerSpeed"] <= StaticTimer.GetElapsedSeconds()) {
+                timedPowerUps.Remove("extraPlayerSpeed");
+                player.NormalSpeed();
+            }
+        }
+
+        private void ActivatePowerUp(Vec2F pos) {
+            switch (new Random().Next(5)) {
+                case 0:
+                    powerUps.AddEntity(new ExtraLife(pos));
+                    break;
+                case 1:
+                    powerUps.AddEntity(new ExtraBall(pos));
+                    break;
+                case 2:
+                    powerUps.AddEntity(new ExtraWide(pos));
+                    break;
+                case 3:
+                    powerUps.AddEntity(new ExtraInvincible(pos));
+                    break;
+                case 4:
+                    powerUps.AddEntity(new ExtraPlayerSpeed(pos));
+                    break;
+            }
+            
+        }
+
+        private void CreateGameTimer() {
+            if (level.meta.ContainsKey("Time")) {
+                gameTime = new GameTime(Int32.Parse(level.meta["Time"]));
+                gameTime.ResetTimer();
+            }
+        }
+
+        private void CheckLostByTime() {
+            if (gameTime != default! && gameTime.CheckTimer()) {
+                ResetState();
+                BreakoutBus.GetBus().RegisterEvent(
+                    new GameEvent {
+                        EventType = GameEventType.GameStateEvent,
+                        Message = "CHANGE_STATE",
+                        StringArg1 = "GAME_OVER",
+                        StringArg2 = "Lost"
+                    }
+                );
+            }
+        }
+        private void CheckGameWon() {
+            if (points.GetPoints() == 100) {
+                ResetState();
+                BreakoutBus.GetBus().RegisterEvent(
+                    new GameEvent {
+                        EventType = GameEventType.GameStateEvent,
+                        Message = "CHANGE_STATE",
+                        StringArg1 = "GAME_OVER",
+                        StringArg2 = "Won"
+                    }
+                );
+            }
+        }
+
+        private void CreateLives() {
+            for (int i = 0; i < life; i++) {
+                lives.AddEntity(
+                    new Life(
+                        new DynamicShape(new Vec2F(0.9f-(i/10f),0.02f), new Vec2F(0.08f,0.08f)),
+                        new Image(Path.Combine("Assets", "Images", "heart_filled.png"))
+                    )
+                );
+            }
+        }
 		
 		public void SendPlayerInput(string msg) {
 			BreakoutBus.GetBus().RegisterEvent (
@@ -177,11 +347,18 @@ namespace Breakout.BreakoutStates {
 			player.Render();
 			balls.RenderEntities();
             points.Render();
+            lives.RenderEntities();
+            if (gameTime != default!) {
+                gameTime.Render();
+            }
+            powerUps.RenderEntities();
 		}
 		public void UpdateState() {
 			player.MovePlayer();
             IterateBalls();
             NextMap();
-		}
-    }
-}
+            CreateLives();
+            CheckLostByTime();
+            CheckGameWon();
+            IteratePowerUps();
+            Time

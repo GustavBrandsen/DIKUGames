@@ -30,28 +30,28 @@ namespace breakoutTests {
         {
             var initialY = ball.Shape.AsDynamicShape().Direction.Y;
             ball.UpdateDirection(CollisionDirection.CollisionDirUp);
-            Assert.AreEqual(initialY*-1f, ball.Shape.AsDynamicShape().Direction.Y);
+            Assert.AreEqual(Math.Round(initialY*-1f), Math.Round(ball.Shape.AsDynamicShape().Direction.Y));
         }
         [Test]
         public void TestDownCollision()
         {
             var initialY = ball.Shape.AsDynamicShape().Direction.Y;
             ball.UpdateDirection(CollisionDirection.CollisionDirDown);
-            Assert.AreEqual(initialY*-1f, ball.Shape.AsDynamicShape().Direction.Y);
+            Assert.AreEqual(Math.Round(initialY*-1f), Math.Round(ball.Shape.AsDynamicShape().Direction.Y));
         }
         [Test]
         public void TestRightCollision()
         {
             var initialX = ball.Shape.AsDynamicShape().Direction.X;
             ball.UpdateDirection(CollisionDirection.CollisionDirRight);
-            Assert.AreEqual(initialX*-1f, ball.Shape.AsDynamicShape().Direction.X);
+            Assert.AreEqual(Math.Round(initialX*-1f), Math.Round(ball.Shape.AsDynamicShape().Direction.X));
         }
         [Test]
         public void TestLeftCollision()
         {
             var initialX = ball.Shape.AsDynamicShape().Direction.X;
             ball.UpdateDirection(CollisionDirection.CollisionDirLeft);
-            Assert.AreEqual(initialX*-1f, ball.Shape.AsDynamicShape().Direction.X);
+            Assert.AreEqual(Math.Round(initialX*-1f), Math.Round(ball.Shape.AsDynamicShape().Direction.X));
         }
     }
 }

@@ -5,8 +5,8 @@ using DIKUArcade.Physics;
 using System;
 namespace Breakout {
     public class Ball : Entity, IBall {
-        private float speed = 0.04f;
-        private float randomX = new Random().Next(-3, 3)/100f;
+        private float speed = 0.03f;
+        private float randomX = new Random().Next(-2, 2)/100f;
         private static Vec2F extent = new Vec2F(0.04f, 0.04f);
         private Vec2F direction;
         public Ball(Vec2F vec, IBaseImage image) : base(new DynamicShape(vec, extent), image) {

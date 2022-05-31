@@ -21,9 +21,11 @@ namespace Breakout {
 			BreakoutBus.GetBus().Subscribe(GameEventType.GameStateEvent, this);
 			window.SetKeyEventHandler(HandleKeyEvent);
         }
+		
 		public void HandleKeyEvent(KeyboardAction action, KeyboardKey key) {
             stateMachine.ActiveState.HandleKeyEvent(action, key);
         }
+
 		public void ProcessEvent(GameEvent gameEvent) {
 			if (gameEvent.EventType == GameEventType.GameStateEvent) {
 				stateMachine.ProcessEvent(gameEvent);
@@ -34,9 +36,11 @@ namespace Breakout {
                 }
             }
         }
+
 		public override void Render() {
 			stateMachine.ActiveState.RenderState();
 		}
+
 		public override void Update() {
 			stateMachine.ActiveState.UpdateState();
 			BreakoutBus.GetBus().ProcessEventsSequentially();

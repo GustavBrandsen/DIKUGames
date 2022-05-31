@@ -27,6 +27,7 @@ namespace Breakout.BreakoutStates{
 			activeMenuButton = 0;
 			gameOverText = new Text("You ", new Vec2F(0.40f,0.30f), new Vec2F(0.4f,0.4f));
 		}
+		
 		public static GameOver GetInstance(string msg) {
 			if (GameOver.instance == default!) {
 				GameOver.instance = new GameOver();
@@ -34,6 +35,7 @@ namespace Breakout.BreakoutStates{
 			}
 			return GameOver.instance;
 		}
+
 		public void InitializeGameState(string msg) {
 			RenderState();
 			UpdateState();
@@ -44,6 +46,7 @@ namespace Breakout.BreakoutStates{
 				gameOverTextColor = System.Drawing.Color.Red;
 			}
 		}
+
 		public void ResetState() {
 			instance = default!;
 			menuButtons = new Text[]{};

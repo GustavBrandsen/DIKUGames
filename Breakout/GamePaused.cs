@@ -29,6 +29,7 @@ namespace Breakout.BreakoutStates{
 			gamePaused = new Text("Game is Paused!", new Vec2F(0.20f,0.13f), new Vec2F(0.6f,0.6f));
 			gamePaused.SetColor(System.Drawing.Color.Turquoise);
 		}
+		
 		public static GamePaused GetInstance() {
 			if (GamePaused.instance == default!) {
 				GamePaused.instance = new GamePaused();
@@ -36,10 +37,12 @@ namespace Breakout.BreakoutStates{
 			}
 			return GamePaused.instance;
 		}
+
 		public void InitializeGameState() {
 			RenderState();
 			UpdateState();
 		}
+
 		public void ResetState() {
 			instance = default!;
 			menuButtons = new Text[]{};
@@ -52,9 +55,7 @@ namespace Breakout.BreakoutStates{
 		/// <summary>
 		/// Update all variables that are being used by this GameState.
 		/// </summary>
-		public void UpdateState() {
-
-		}
+		public void UpdateState() {}
 		
 		/// <summary>
 		/// Render all entities in this GameState

@@ -9,15 +9,23 @@ namespace Breakout {
             display = new Text (points.ToString(), position, extent);
             display.SetColor(System.Drawing.Color.White);
         }
+        
         public void AddPoints (int addPoints) {
             points += addPoints;
         }
+
         public void Render() {
             display.SetText(points.ToString());
             display.RenderText();
         }
+
         public int GetPoints() {
             return points;
         }
     }
 }
+
+
+
+
+

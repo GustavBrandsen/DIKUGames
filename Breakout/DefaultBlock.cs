@@ -14,6 +14,7 @@ namespace Breakout {
             this.image = image;
             this.shape = shape;
         }
+        
         ///<summary> Decrements the health field </summary>
         /// <param> Takes no parameter </param>
         /// <output> Nothing </output> 
@@ -23,9 +24,11 @@ namespace Breakout {
                 this.DeleteEntity();
             }
         }
+
         public override int GetHealth() {
             return health;
         }
+
         public override int GetValue() {
             return value;
         }

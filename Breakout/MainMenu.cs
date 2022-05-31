@@ -24,6 +24,7 @@ namespace Breakout.BreakoutStates{
 			);
 			activeMenuButton = 0;
 		}
+		
 		public static MainMenu GetInstance() {
 			if (MainMenu.instance == default!) {
 				MainMenu.instance = new MainMenu();
@@ -31,10 +32,12 @@ namespace Breakout.BreakoutStates{
 			}
 			return MainMenu.instance;
 		}
+
 		public void InitializeGameState() {
 			RenderState();
 			UpdateState();
 		}
+
 		public void ResetState() {
 			instance = default!;
 			menuButtons = new Text[]{};

@@ -44,6 +44,7 @@ namespace Breakout.BreakoutStates {
             
 			powerUps = new EntityContainer<PowerUp>();
         }
+        
         public static GameRunning GetInstance() {
             if (GameRunning.instance == default!) {
                 GameRunning.instance = new GameRunning();
@@ -51,15 +52,18 @@ namespace Breakout.BreakoutStates {
             }
             return GameRunning.instance;
         }
+
         public void InitializeGameState() {
             RenderState();
 			UpdateState();
             for (int i = 0; i < fileEntries.Length - 1; i++) {
             }
         }
+
         public void ResetState() {
             instance = default!;
         }
+
         public void HandleKeyEvent(KeyboardAction action, KeyboardKey key) {
             if (action == KeyboardAction.KeyPress) {
 				switch (key) {
@@ -115,6 +119,7 @@ namespace Breakout.BreakoutStates {
 				}
 			}
         }
+
         private void NextMap() {
             if (level.Blocks.CountEntities() == 0) {
                 if (levelNum + 1 < fileEntries.Length) {
@@ -137,6 +142,7 @@ namespace Breakout.BreakoutStates {
             }
 
         }
+
 		private void IterateBalls() {
 			balls.Iterate(ball => {
 			    ball.Shape.Move();
@@ -307,6 +313,7 @@ namespace Breakout.BreakoutStates {
                 );
             }
         }
+
         private void CheckGameWon() {
             if (points.GetPoints() == 100) {
                 ResetState();
@@ -342,6 +349,7 @@ namespace Breakout.BreakoutStates {
 				}
 			);
 		}
+
 		public void RenderState() {
             level.Render();
 			player.Render();
@@ -353,6 +361,7 @@ namespace Breakout.BreakoutStates {
             }
             powerUps.RenderEntities();
 		}
+
 		public void UpdateState() {
 			player.MovePlayer();
             IterateBalls();
@@ -361,4 +370,7 @@ namespace Breakout.BreakoutStates {
             CheckLostByTime();
             CheckGameWon();
             IteratePowerUps();
-            Time
+            TimedPowerUps();
+		}
+    }
+}

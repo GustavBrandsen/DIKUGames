@@ -9,6 +9,7 @@ namespace Breakout {
             this.shape = shape;
             this.image = image;
         }
+        
         public void Render() {
             this.RenderEntity();
         }

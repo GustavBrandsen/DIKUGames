@@ -16,21 +16,27 @@ namespace Breakout {
             this.shape = shape;
 			BreakoutBus.GetBus().Subscribe(GameEventType.InputEvent, this);
         }
+        
         public void DoubleSpeed() {
-            MOVEMENT_SPEED = 0.03f;
+            MOVEMENT_SPEED = 0.04f;
         }
+
         public void NormalSpeed() {
             MOVEMENT_SPEED = 0.02f;
         }
+
         public void Render() {
             this.RenderEntity();
         }
+
         public Vec2F GetPosition() {
             return shape.Position;
         }
+
         public Vec2F GetExtent() {
             return shape.Extent;
         }
+
         public void ProcessEvent(GameEvent gameEvent) {
             if (gameEvent.EventType == GameEventType.InputEvent) {
                 switch (gameEvent.Message) {
@@ -51,6 +57,7 @@ namespace Breakout {
                 } 
             }
         }
+
         public void MovePlayer() {
             if (!(moveLeft == 0.0f)) {
                 if (shape.Position.X > 0 && shape.Position.X <= 0.98f-shape.Extent.X + MOVEMENT_SPEED) {
@@ -63,6 +70,7 @@ namespace Breakout {
                 }
             }
         }
+
         private void MoveLeft(bool val) {
             switch (val) {
                 case true:
@@ -74,6 +82,7 @@ namespace Breakout {
             }
             NewDirection();
         }
+
         private void MoveRight(bool val) {
             switch (val) {
                 case true:
@@ -85,9 +94,11 @@ namespace Breakout {
             }
             NewDirection();
         }
+
         private void NewDirection() {
             shape.Direction.X = moveLeft + moveRight;
         }
+
         public void DoubleSize() {
             this.Shape.Extent.X =  this.Shape.Extent.X+0.2f;
             if (this.Shape.Position.X+this.Shape.Extent.X >= 0.98f) {
@@ -95,8 +106,8 @@ namespace Breakout {
             } else {
                 this.Shape.Position.X = this.Shape.Position.X-0.1f;
             }
-            
         }
+
         public void NormalSize() {
             this.Shape.Extent.X =  this.Shape.Extent.X-0.2f;
             this.Shape.Position.X = this.Shape.Position.X+0.1f;

@@ -10,6 +10,7 @@ namespace Breakout.BreakoutStates {
             ActiveState = MainMenu.GetInstance();
             GameRunning.GetInstance();
         }
+        
         private void SwitchState(GameStateType stateType) {
             switch (stateType) {
                 case GameStateType.GameRunning:
@@ -28,6 +29,7 @@ namespace Breakout.BreakoutStates {
                     break;
             }
         }
+
         public void ProcessEvent(GameEvent gameEvent) {
             if (gameEvent.EventType == GameEventType.GameStateEvent) {
                 if (gameEvent.Message == "CHANGE_STATE") {

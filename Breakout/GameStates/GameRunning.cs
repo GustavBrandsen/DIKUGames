@@ -120,14 +120,25 @@ namespace Breakout.BreakoutStates {
 			}
         }
 
+        private int CountUnbreakableBlocks() {
+            int count = 0;
+            level.Blocks.Iterate(block => {
+                if (block.GetType() == typeof(Breakout.UnbreakableBlock)) {
+                    count++;
+                }
+            });
+            return count;
+        }
+
         private void NextMap() {
-            if (level.Blocks.CountEntities() == 0) {
+            if (level.Blocks.CountEntities() == CountUnbreakableBlocks()*2) {
                 if (levelNum + 1 < fileEntries.Length) {
                     levelNum++;
                     balls.ClearContainer();
                     player.Shape.Position = new Vec2F(0.4f, 0.1f);
                     level = new Level(fileEntries[levelNum]);
                     CreateGameTimer();
+                    timedPowerUps = new Dictionary<string, double>();
                     RenderState();
                 } else {
                     ResetState();

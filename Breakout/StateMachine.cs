@@ -11,6 +11,8 @@ namespace Breakout.BreakoutStates {
             GameRunning.GetInstance();
         }
         
+        /// <summary> Change the active state</summary>
+	    /// <param name="stateType">A GameStateType enum.</param>
         private void SwitchState(GameStateType stateType) {
             switch (stateType) {
                 case GameStateType.GameRunning:
@@ -29,7 +31,8 @@ namespace Breakout.BreakoutStates {
                     break;
             }
         }
-
+		/// <summary> Registers events from the Breakoutbus and handle appropriate</summary>
+		/// <param name="gameEvent">A GameEvent in the Breakoutbus.</param>
         public void ProcessEvent(GameEvent gameEvent) {
             if (gameEvent.EventType == GameEventType.GameStateEvent) {
                 if (gameEvent.Message == "CHANGE_STATE") {

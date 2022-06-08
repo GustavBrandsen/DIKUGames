@@ -24,8 +24,10 @@ namespace Breakout {
             Blocks.RenderEntities();
         }
 
-        // Read the strings from the txt file in "lines" and sort them into the lists/dictionaries
-        private void SortData() {
+		/// <summary>
+		/// Read the strings from the txt file in "lines" and sort them into the lists/dictionaries
+		/// </summary>
+		private void SortData() {
 			for (int i = 0; i < lines.Length - 1; i++) {
 				int k = i;
 				switch (lines[i]) {
@@ -57,7 +59,9 @@ namespace Breakout {
 			}
         }
 
-        // Create the blocks in the EntityContainer
+		/// <summary>
+		/// Create the blocks in the EntityContainer
+		/// </summary>
         private void CreateMap() {
 			for (int y = 0; y < map.Count - 1; y++) {
 				for (int x = 0; x < map[y].Length; x++) {

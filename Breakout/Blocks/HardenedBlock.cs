@@ -16,8 +16,6 @@ namespace Breakout {
         }
         
         ///<summary> Decrements the health field </summary>
-        /// <param> Takes no parameter </param>
-        /// <output> Nothing </output> 
         public override void Decreasehealth() {
             health--;
             if (health == 1) {

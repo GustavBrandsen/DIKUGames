@@ -13,7 +13,10 @@ namespace Breakout {
             direction = new Vec2F(randomX, speed-Math.Abs(randomX));
             this.Shape.AsDynamicShape().ChangeDirection(direction);
         }
-        
+        /// <summary>
+		/// Changes the direction of the ball depending on what side the ball collided.
+		/// </summary>
+		/// <param name="dir">CollisionDirection that tells what side the ball collided.</param>
         public void UpdateDirection(CollisionDirection dir){
             if (this.Shape.AsDynamicShape().Direction.X == 0f) {
                 var addToX = new Random().Next(-1, 1)/100f;

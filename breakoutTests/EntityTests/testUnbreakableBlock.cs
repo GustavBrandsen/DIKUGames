@@ -21,7 +21,8 @@ namespace breakoutTests {
             Window.CreateOpenGLContext();
             block = new UnbreakableBlock(
                 new DynamicShape(new Vec2F(0.4f, 0.05f), new Vec2F(0.2f, 0.03f)),
-                new Image(Path.GetFullPath(Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..","..","..","..","Breakout","Assets", "Images", "blue-block.png"))));
+                new Image(Path.GetFullPath(Path.Combine(System.IO.Directory.GetCurrentDirectory(), "..","..","..","..","Breakout","Assets", "Images", "blue-block.png"))),
+                true);
         }
         [Test]
         public void TestHealthExists()

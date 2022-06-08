@@ -21,11 +21,14 @@ namespace Breakout {
 			BreakoutBus.GetBus().Subscribe(GameEventType.GameStateEvent, this);
 			window.SetKeyEventHandler(HandleKeyEvent);
         }
-		
+		/// <summary> Registers an event and sends it to the active states HandleKeyEvent method </summary>
+		/// <param name="action">Enumeration representing key press/release.</param>
+		/// <param name="key">Enumeration representing the keyboard key.</param>
 		public void HandleKeyEvent(KeyboardAction action, KeyboardKey key) {
             stateMachine.ActiveState.HandleKeyEvent(action, key);
         }
-
+		/// <summary> Registers events from the Breakoutbus and handle appropriate</summary>
+		/// <param name="gameEvent">A GameEvent in the Breakoutbus.</param>
 		public void ProcessEvent(GameEvent gameEvent) {
 			if (gameEvent.EventType == GameEventType.GameStateEvent) {
 				stateMachine.ProcessEvent(gameEvent);
@@ -36,11 +39,11 @@ namespace Breakout {
                 }
             }
         }
-
+		/// <summary> Render the active state </summary>
 		public override void Render() {
 			stateMachine.ActiveState.RenderState();
 		}
-
+		/// <summary> Updates the active state </summary>
 		public override void Update() {
 			stateMachine.ActiveState.UpdateState();
 			BreakoutBus.GetBus().ProcessEventsSequentially();

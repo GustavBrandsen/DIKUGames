@@ -37,6 +37,9 @@ namespace Breakout {
             return shape.Extent;
         }
 
+        ///<summary>
+        /// Sets the Movement methods to true depending on player events from GameRunning
+        ///</summary>
         public void ProcessEvent(GameEvent gameEvent) {
             if (gameEvent.EventType == GameEventType.InputEvent) {
                 switch (gameEvent.Message) {
@@ -57,7 +60,7 @@ namespace Breakout {
                 } 
             }
         }
-
+        /// <summary> Moves the player within the bondaries of the game</summary>
         public void MovePlayer() {
             if (!(moveLeft == 0.0f)) {
                 if (shape.Position.X > 0 && shape.Position.X <= 0.98f-shape.Extent.X + MOVEMENT_SPEED) {
@@ -70,7 +73,7 @@ namespace Breakout {
                 }
             }
         }
-
+        /// <summary> Set the field moveLeft to the correct number </summary>
         private void MoveLeft(bool val) {
             switch (val) {
                 case true:
@@ -82,7 +85,7 @@ namespace Breakout {
             }
             NewDirection();
         }
-
+        /// <summary> Set the field moveRight to the correct number</summary>
         private void MoveRight(bool val) {
             switch (val) {
                 case true:
@@ -99,6 +102,7 @@ namespace Breakout {
             shape.Direction.X = moveLeft + moveRight;
         }
 
+        /// <summary> Double the players extend </summary>
         public void DoubleSize() {
             this.Shape.Extent.X =  this.Shape.Extent.X+0.2f;
             if (this.Shape.Position.X+this.Shape.Extent.X >= 0.98f) {
@@ -107,7 +111,7 @@ namespace Breakout {
                 this.Shape.Position.X = this.Shape.Position.X-0.1f;
             }
         }
-
+        /// <summary> Halfs the players extent</summary>
         public void NormalSize() {
             this.Shape.Extent.X =  this.Shape.Extent.X-0.2f;
             this.Shape.Position.X = this.Shape.Position.X+0.1f;

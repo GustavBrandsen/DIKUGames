@@ -44,7 +44,7 @@ namespace Breakout.BreakoutStates {
             
 			powerUps = new EntityContainer<PowerUp>();
         }
-        
+        /// <summary> Make sure you can only create one GameRunning (Defensive programming)</summary>
         public static GameRunning GetInstance() {
             if (GameRunning.instance == default!) {
                 GameRunning.instance = new GameRunning();
@@ -64,6 +64,11 @@ namespace Breakout.BreakoutStates {
             instance = default!;
         }
 
+        /// <summary>
+		/// Each state can react to key events, delegated from the host StateMachine.
+		/// </summary>
+		/// <param name="action">Enumeration representing key press/release.</param>
+		/// <param name="key">Enumeration representing the keyboard key.</param>
         public void HandleKeyEvent(KeyboardAction action, KeyboardKey key) {
             if (action == KeyboardAction.KeyPress) {
 				switch (key) {
@@ -120,6 +125,8 @@ namespace Breakout.BreakoutStates {
 			}
         }
 
+        /// <summary> Count the number of unbreakable blocks in the current level</summary>
+        /// <return> Returns number of unbreakable blocks as int</return>
         private int CountUnbreakableBlocks() {
             int count = 0;
             level.Blocks.Iterate(block => {
@@ -129,7 +136,7 @@ namespace Breakout.BreakoutStates {
             });
             return count;
         }
-
+        /// <summary> Changes the level of the game and resets multiple objects</summary>
         private void NextMap() {
             if (level.Blocks.CountEntities() == CountUnbreakableBlocks()*2) {
                 if (levelNum + 1 < fileEntries.Length) {
@@ -153,7 +160,7 @@ namespace Breakout.BreakoutStates {
             }
 
         }
-
+        /// <summary> Iterates through the ball entitycontainer to move it and other things.</summary>
 		private void IterateBalls() {
 			balls.Iterate(ball => {
 			    ball.Shape.Move();
@@ -213,7 +220,7 @@ namespace Breakout.BreakoutStates {
 				}
 			});
 		}
-
+        /// <summary> Iterates through powerups and moves it and other things.</summary>
         private void IteratePowerUps() {
             powerUps.Iterate(powerUp => {
 			    powerUp.Shape.Move();
@@ -257,7 +264,7 @@ namespace Breakout.BreakoutStates {
                 }
             });
         }
-
+        /// <summary> Check if the timed powerups should be deleted or not</summary>
         private void TimedPowerUps() {
             if (timedPowerUps.ContainsKey("infiniteBalls") && timedPowerUps["infiniteBalls"] <= StaticTimer.GetElapsedSeconds()) {
                 timedPowerUps.Remove("infiniteBalls");
@@ -282,7 +289,8 @@ namespace Breakout.BreakoutStates {
                 player.NormalSpeed();
             }
         }
-
+        /// <summary> pick a random powerup and add it to the powerup entitycontainer</summary>
+	    /// <param name="pos">Vec2F as posistion to be spawned at.</param>
         private void ActivatePowerUp(Vec2F pos) {
             switch (new Random().Next(5)) {
                 case 0:
@@ -303,14 +311,15 @@ namespace Breakout.BreakoutStates {
             }
             
         }
-
+        /// <summary> Create a gametimer to display time left </summary>
         private void CreateGameTimer() {
             if (level.meta.ContainsKey("Time")) {
                 gameTime = new GameTime(Int32.Parse(level.meta["Time"]));
                 gameTime.ResetTimer();
             }
         }
-
+        
+        ///<summary>Checks if the game time is over and change state if it is </summary>
         private void CheckLostByTime() {
             if (gameTime != default! && gameTime.CheckTimer()) {
                 ResetState();
@@ -324,9 +333,9 @@ namespace Breakout.BreakoutStates {
                 );
             }
         }
-
+        /// <summary> Check if the points is equal or bigger than 100 and then change state</summary>
         private void CheckGameWon() {
-            if (points.GetPoints() == 100) {
+            if (points.GetPoints() >= 100) {
                 ResetState();
                 BreakoutBus.GetBus().RegisterEvent(
                     new GameEvent {
@@ -338,7 +347,7 @@ namespace Breakout.BreakoutStates {
                 );
             }
         }
-
+        /// <summary> Add lives to the entitycontainer </summary>
         private void CreateLives() {
             for (int i = 0; i < life; i++) {
                 lives.AddEntity(
@@ -349,7 +358,8 @@ namespace Breakout.BreakoutStates {
                 );
             }
         }
-		
+		/// <summary> Create event that should be sent to the player</summary>
+	    /// <param name="msg">String the should be added to the event.</param>
 		public void SendPlayerInput(string msg) {
 			BreakoutBus.GetBus().RegisterEvent (
 				new GameEvent {
@@ -361,6 +371,9 @@ namespace Breakout.BreakoutStates {
 			);
 		}
 
+        /// <summary>
+		/// Render all entities in this GameState
+		/// </summary>
 		public void RenderState() {
             level.Render();
 			player.Render();
@@ -372,7 +385,7 @@ namespace Breakout.BreakoutStates {
             }
             powerUps.RenderEntities();
 		}
-
+        /// <summary> Updates by calling multiple methods </summary>
 		public void UpdateState() {
 			player.MovePlayer();
             IterateBalls();

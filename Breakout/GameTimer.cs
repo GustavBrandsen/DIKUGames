@@ -15,31 +15,39 @@ namespace Breakout {
             staticTimer = new StaticTimer();
         }
         
+        /// <summary> Check if the StaticTimer is equal to the given gameTime</summary>
+        /// <return> Returns a bool</return>
         public bool CheckTimer() {
             return Math.Round(StaticTimer.GetElapsedSeconds()) == gameTime;
         }
         
+        /// <summary> Returns the elapsed seconds</summary>
+        /// <return> Returns an int</return>
         public int GetElapsedSeconds() {
             return Convert.ToInt32(StaticTimer.GetElapsedSeconds());
         }
-        
+        /// <summary> Set the timerText to the correct number and render the text to the screen </summary>
         public void Render() {
             timerText.SetText((gameTime-GetElapsedSeconds()).ToString());
             timerText.RenderText();
         }
-        
+        /// <summary> Reset the StaticTimer </summary>
         public void ResetTimer() {
             StaticTimer.RestartTimer();
         }
         
+        /// <summary> Pause the StaticTimer </summary>
         public void PauseTimer() {
             StaticTimer.PauseTimer();
         }
         
+        /// <summary> Resume the StaticTimer </summary>
         public void ResumeTimer() {
             StaticTimer.ResumeTimer();
         }
         
+        /// <summary> Adds time to the countdown</summary>
+	    /// <param name="extraTime">A double.</param>
         public void AddTime(double extraTime) {
             gameTime += extraTime;
         }
